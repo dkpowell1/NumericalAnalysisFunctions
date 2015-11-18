@@ -1,11 +1,11 @@
 function r = rhomberg(f,a,b,tol)
   n = 1;
-  %I(1,1) = Trapezoid Method
+  I(1,1) = compositeTrapezoid(f,a,b,n);
   iter = 0;
   while error > tol
     iter = iter+1;
     n = 2^iter;
-    %I(iter+1,1) = Trapezoid with new N 
+    I(iter+1,1) = compositeTrapezoid(f,a,b,n); 
     for k = 2: iter+1
       j = 2+iter-k;
       I(j,k) = (4^(k-1)*I(j+1,k-1)-I(j,k-1))/(4^(k-1)-1);
