@@ -1,13 +1,16 @@
-function r = rhomberg(f,a,b,n)
-h = (b - a) ./ (2.^(0:n-1));
-r(1,1) = (b - a) * (f(a) + f(b)) / 2;
-for j = 2:n
-    subtotal = 0;
-    for i = 1:2^(j-2)
-        subtotal = subtotal + f(a + (2 * i - 1) * h(j));
+function r = rhomberg(f,a,b,tol)
+  n = 1;
+  %I(1,1) = Trapezoid Method
+  iter = 0;
+  while error > tol
+    iter = iter+1;
+    n = 2^iter;
+    %I(iter+1,1) = Trapezoid with new N 
+    for k = 2: iter+1
+      j = 2+iter-k;
+      I(j,k) = (4^(k-1)*I(j+1,k-1)-I(j,k-1))/(4^(k-1)-1);
     end
-    r(j,1) = r(j-1,1) / 2 + h(j) * subtotal;
-    for k = 2:j
-        r(j,k) = (4^(k-1) * r(j,k-1) - r(j-1,k-1)) / (4^(k-1) - 1);
-    end
-end;
+    error = abs((I(1,iter+1)-I(2,iter))//I(1,iter+1))*100; 
+  endwhile
+  r = I(1,iter+1);
+end
